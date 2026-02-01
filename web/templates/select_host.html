@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Target | ADV_SCANNER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background-color: #0b0f1a; 
+            background-image: radial-gradient(#1e293b 0.5px, transparent 0.5px); 
+            background-size: 30px 30px; 
+        }
+        .host-card { 
+            transition: all 0.3s ease; 
+            border: 1px solid rgba(75, 85, 99, 0.3); 
+            background: rgba(17, 24, 39, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .host-card:hover { 
+            transform: translateY(-5px); 
+            border-color: #3b82f6; 
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3); 
+        }
+    </style>
+</head>
+<body class="text-gray-200 p-10 font-sans">
+    <div class="max-w-5xl mx-auto">
+        
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h1 class="text-4xl font-black text-white tracking-tight">Host Discovery</h1>
+                <p class="text-gray-500 font-mono mt-2 uppercase tracking-widest text-xs">Network Segment: {{ range }}</p>
+            </div>
+            <div class="flex items-center gap-3 bg-blue-500/10 px-4 py-2 rounded-xl border border-blue-500/20">
+                <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                <span class="text-xs font-bold text-blue-400 uppercase">{{ hosts|length }} Live Assets Found</span>
+            </div>
+        </div>
+
+        <div class="grid gap-6">
+            {% for host in hosts %}
+            <div class="host-card p-8 rounded-3xl">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                    
+                    <div class="flex items-center gap-6">
+                        <div class="w-16 h-16 bg-gray-800 rounded-2xl flex items-center justify-center text-3xl shadow-inner border border-gray-700">
+                            💻
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-black text-white font-mono tracking-tighter">{{ host.ip }}</h2>
+                            <div class="flex items-center gap-3 mt-1">
+                                <span class="text-[10px] font-black text-blue-500 uppercase tracking-widest">Active Status</span>
+                                <span class="text-gray-600">•</span>
+                                <span class="text-[10px] font-bold text-gray-500 uppercase">{{ host.hostname }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form action="/deep_scan" method="POST" class="flex flex-wrap items-center gap-4">
+                        <input type="hidden" name="target_ip" value="{{ host.ip }}">
+                        
+                        <div class="relative">
+                            <select name="mode" class="appearance-none bg-gray-900 border border-gray-700 rounded-xl px-5 py-3 pr-12 text-sm font-bold focus:outline-none focus:border-blue-500 transition cursor-pointer text-gray-300">
+                                <option value="quick">⚡ QUICK SCAN</option>
+                                <option value="full">🔍 FULL SCAN</option>
+                                <option value="stealth">🥷 STEALTH MODE</option>
+                            </select>
+                            <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 text-xs">▼</div>
+                        </div>
+
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-600/20">
+                            Initialize Deep Scan
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if hosts|length == 0 %}
+        <div class="text-center py-20 border-2 border-dashed border-gray-800 rounded-3xl">
+            <p class="text-gray-500 font-bold uppercase tracking-widest">No active hosts identified in this range.</p>
+            <p class="text-gray-600 text-xs mt-2">Try adjusting your range or check your VPN/Network settings.</p>
+            <a href="/scanner" class="mt-6 inline-block bg-gray-800 text-white px-6 py-2 rounded-lg text-xs font-bold">Try Again</a>
+        </div>
+        {% endif %}
+
+        <div class="mt-20 text-center border-t border-gray-800 pt-10">
+            <a href="/scanner" class="text-gray-500 hover:text-white text-xs font-bold uppercase tracking-widest transition">← Back to Configuration</a>
+        </div>
+    </div>
+</body>
+</html>

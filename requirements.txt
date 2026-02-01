@@ -1,0 +1,5 @@
+scapy
+python-nmap
+requests
+flask
+fpdf2
