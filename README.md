@@ -31,7 +31,7 @@ Ensure you have Nmap installed on your system (Kali Linux comes with this pre-in
 
 2. Clone and Initialize
 Bash
-git clone https://github.com/YOUR_USERNAME/advanced-network-scanner.git
+git clone https://github.com/CyberVortexX/advanced-network-scanner.git
 cd advanced-network-scanner
 python3 -m venv venv
 source venv/bin/activate
